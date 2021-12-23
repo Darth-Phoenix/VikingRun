@@ -7,29 +7,30 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(NavMeshAgent))]
+//[RequireComponent(typeof(NavMeshAgent))]
 
 public class VikingController : MonoBehaviour
 {
-    public Vector3 MovingDirection;
-    public float JumpingForce = 200, MovingThreshold;
+    //public Vector3 MovingDirection;
+    public float JumpingForce = 150;
     bool isjump = false;
     bool run = false;
         
     //MeshRenderer mr;
-    [SerializeField]float movingSpeed = 10f;
+    [SerializeField]float movingSpeed = 7.0f;
     Rigidbody rb;
     Animator animator;
     NavMeshAgent agent;
 
     RaycastHit raycastHit;
-    Vector2 velocity = Vector2.zero;
+ 
+    //Vector2 velocity = Vector2.zero;
 
 
-    private void OnAnimatorMove()
+    /*private void OnAnimatorMove()
     {
         transform.position = agent.nextPosition;
-    }
+    }*/
     void Awake()
     {
         //Debug.Log("awake");
@@ -41,14 +42,14 @@ public class VikingController : MonoBehaviour
         //mr = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
-        agent.updatePosition = false;
+        //agent = GetComponent<NavMeshAgent>();
+        //agent.updatePosition = false;
         transform.position = Vector3.one;
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.name == "big_module_01_floor")
+        if (collision.transform.name.Contains("module"))
         {
             isjump = false;
         }
@@ -56,7 +57,7 @@ public class VikingController : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.transform.name == "big_module_01_floor")
+        if (collision.transform.name.Contains("module"))
         {
             isjump = false;
         }
@@ -69,32 +70,22 @@ public class VikingController : MonoBehaviour
 
     void Update()
     {
-
-        /*run = false;
-
+        run = false;
         if (Input.GetKey(KeyCode.W))
         {
-            transform.localPosition += movingSpeed * Time.deltaTime * Vector3.forward;
             run = true;
+            transform.localPosition += movingSpeed * Time.deltaTime * transform.forward;
         }
 
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            transform.localPosition += movingSpeed * Time.deltaTime * Vector3.back;
-            run = true;
+            transform.Rotate(new Vector3(0f, -90f, 0f));
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.D))
         {
-            transform.localPosition += movingSpeed * Time.deltaTime * Vector3.left;
-            run = true;
+            transform.Rotate(new Vector3(0f, 90f, 0f));
         }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.localPosition += movingSpeed * Time.deltaTime * Vector3.right;
-            run = true;
-        }*/
 
 
         if (!isjump)
@@ -121,7 +112,7 @@ public class VikingController : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(1))
+        /*if (Input.GetMouseButtonDown(1))
         {
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(r, out raycastHit))
@@ -135,8 +126,9 @@ public class VikingController : MonoBehaviour
         float dz = Vector3.Dot(transform.forward, worldDeltaPosition);
         Vector2 deltaPostition = new Vector2(dx, dz);
         velocity = deltaPostition / Time.deltaTime;
-        run = velocity.magnitude > MovingThreshold && agent.remainingDistance > agent.radius;
+        run = velocity.magnitude > MovingThreshold && agent.remainingDistance > agent.radius;*/
 
         animator.SetBool("Run", run);
+        animator.SetBool("Jump", isjump);
     }
 }
