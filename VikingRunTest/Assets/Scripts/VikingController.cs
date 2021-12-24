@@ -12,12 +12,12 @@ using UnityEngine.AI;
 public class VikingController : MonoBehaviour
 {
     //public Vector3 MovingDirection;
-    public float JumpingForce = 150;
+    public float JumpingForce = 100;
     bool isjump = false;
     bool run = false;
         
     //MeshRenderer mr;
-    [SerializeField]float movingSpeed = 7.0f;
+    [SerializeField]float movingSpeed = 10.0f;
     Rigidbody rb;
     Animator animator;
     NavMeshAgent agent;
@@ -70,12 +70,8 @@ public class VikingController : MonoBehaviour
 
     void Update()
     {
-        run = false;
-        if (Input.GetKey(KeyCode.W))
-        {
-            run = true;
-            transform.localPosition += movingSpeed * Time.deltaTime * transform.forward;
-        }
+        run = true;
+        transform.localPosition += 10 * Time.deltaTime * transform.forward;
 
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -94,7 +90,7 @@ public class VikingController : MonoBehaviour
             {
                 {
                     isjump = true;
-                    rb.AddForce(JumpingForce * Vector3.up);
+                    rb.AddForce(100 * Vector3.up);
                 }
             }
         }
