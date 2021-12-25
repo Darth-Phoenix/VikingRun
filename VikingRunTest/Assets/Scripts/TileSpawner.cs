@@ -8,7 +8,6 @@ public class TileSpawner : MonoBehaviour
     private GameObject tileToSpawn, obstacle;
     public GameObject referenceObject;
     private GameObject child;
-    public float timeOffset = 0.4f;
     private bool ObstacleUsed = false;
     private float r;
     private Vector3 previousTilePosition;
@@ -18,15 +17,15 @@ public class TileSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        previousTilePosition = referenceObject.transform.position;
-        spawnPos = previousTilePosition;
         tileToSpawn = tileA;
         direction = mainDirection;
+        previousTilePosition = referenceObject.transform.position;
+        spawnPos = previousTilePosition - 6.0f * direction;
         child = Instantiate(startA, spawnPos, Quaternion.Euler(0, 0, 0));
         child.transform.parent = referenceObject.transform;
         spawnPos -= 1.42f * direction;
         previousTilePosition = spawnPos;
-        for (int i=0; i<5; i++)
+        for (int i=0; i<6; i++)
         {
             spawnPos = previousTilePosition + 6.0f * direction;
             child = Instantiate(tileA, spawnPos, Quaternion.Euler(0, 0, 0));
@@ -104,17 +103,17 @@ public class TileSpawner : MonoBehaviour
             else if (tileToSpawn == startA)
             {
                 tileToSpawn = tileA;
-                spawnPos -= 1.42f * direction;
+                spawnPos -= 1.5f * direction;
             }
             else if (tileToSpawn == startB)
             {
                 tileToSpawn = tileB;
-                spawnPos -= 1.42f * direction;
+                spawnPos -= 1.5f * direction;
             }
             previousTilePosition = spawnPos;
         }
 
-        if ((referenceObject.transform.GetChild(0).position - transform.position).magnitude > 30)
+        if ((referenceObject.transform.GetChild(0).position - transform.position).magnitude > 50)
             Destroy(referenceObject.transform.GetChild(0).gameObject);
     }
 }

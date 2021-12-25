@@ -2444,7 +2444,7 @@ ModelImporter:
       name: Knockdown
       takeName: Take 001
       internalID: 0
-      firstFrame: 285
+      firstFrame: 284
       lastFrame: 313
       wrapMode: 0
       orientationOffsetY: 0

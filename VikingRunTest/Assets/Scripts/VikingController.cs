@@ -14,8 +14,9 @@ public class VikingController : MonoBehaviour
     //public Vector3 MovingDirection;
     public float JumpingForce = 100;
     bool isjump = false;
-    bool run = false;
-        
+    bool run = true;
+    bool endgame = false;
+
     //MeshRenderer mr;
     [SerializeField]float movingSpeed = 9.0f;
     Rigidbody rb;
@@ -44,20 +45,32 @@ public class VikingController : MonoBehaviour
         animator = GetComponent<Animator>();
         //agent = GetComponent<NavMeshAgent>();
         //agent.updatePosition = false;
-        transform.position = Vector3.one;
+        transform.position = new Vector3(0, 1, 1);
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.name.Contains("module"))
+        if (collision.transform.name == "Monster")
         {
+            endgame = true;
+            run = false;
             isjump = false;
+            transform.Rotate(new Vector3(0f, 90f, 0f));
+            animator.SetBool("Defeated", endgame);
         }
-        if (collision.transform.name.Contains("rock"))
+        else
         {
-            rb.AddForce(transform.forward * -10);
-            movingSpeed = 0;
-        }
+            if (collision.transform.name.Contains("module"))
+            {
+                isjump = false;
+                run = true;
+            }
+            if (collision.transform.name.Contains("rock"))
+            {
+                rb.AddForce(transform.forward * -10);
+                movingSpeed = 0;
+            }
+        }      
     }
 
     void OnCollisionStay(Collision collision)
@@ -65,6 +78,7 @@ public class VikingController : MonoBehaviour
         if (collision.transform.name.Contains("module"))
         {
             isjump = false;
+            run = true;
         }
         if (collision.transform.name.Contains("rock"))
         {
@@ -80,61 +94,61 @@ public class VikingController : MonoBehaviour
 
     void Update()
     {
-        run = true;
-        transform.localPosition += movingSpeed * Time.deltaTime * transform.forward;
-
-        if (Input.GetKeyDown(KeyCode.A))
+        if (!endgame)
         {
-            transform.Rotate(new Vector3(0f, -90f, 0f));
-        }
+            transform.localPosition += movingSpeed * Time.deltaTime * transform.forward;
 
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            transform.Rotate(new Vector3(0f, 90f, 0f));
-        }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                transform.Rotate(new Vector3(0f, -90f, 0f));
+            }
 
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                transform.Rotate(new Vector3(0f, 90f, 0f));
+            }
 
-        if (!isjump)
-        {
             if (Input.GetKey(KeyCode.Space))
             {
+                if (!isjump)
                 {
                     isjump = true;
-                    rb.AddForce(150 * Vector3.up);
+                    run = false;
+                    rb.AddForce(145 * Vector3.up);
                 }
             }
-        }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(r, out raycastHit))
+            if (Input.GetMouseButtonDown(0))
             {
-                if (raycastHit.collider.transform.name == "Viking_Shield(Clone)")
+                Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(r, out raycastHit))
                 {
-                    Destroy(raycastHit.collider.gameObject);
-                }              
+                    if (raycastHit.collider.transform.name == "Viking_Shield(Clone)")
+                    {
+                        Destroy(raycastHit.collider.gameObject);
+                    }
+                }
             }
-        }
 
-        /*if (Input.GetMouseButtonDown(1))
-        {
-            Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(r, out raycastHit))
+            /*if (Input.GetMouseButtonDown(1))
             {
-                agent.SetDestination(raycastHit.point);
+                Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(r, out raycastHit))
+                {
+                    agent.SetDestination(raycastHit.point);
+                }
             }
-        }
 
-        Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
-        float dx = Vector3.Dot(transform.right, worldDeltaPosition);
-        float dz = Vector3.Dot(transform.forward, worldDeltaPosition);
-        Vector2 deltaPostition = new Vector2(dx, dz);
-        velocity = deltaPostition / Time.deltaTime;
-        run = velocity.magnitude > MovingThreshold && agent.remainingDistance > agent.radius;*/
+            Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
+            float dx = Vector3.Dot(transform.right, worldDeltaPosition);
+            float dz = Vector3.Dot(transform.forward, worldDeltaPosition);
+            Vector2 deltaPostition = new Vector2(dx, dz);
+            velocity = deltaPostition / Time.deltaTime;
+            run = velocity.magnitude > MovingThreshold && agent.remainingDistance > agent.radius;*/
 
-        animator.SetBool("Run", run);
-        animator.SetBool("Jump", isjump);
+            animator.SetBool("Run", run);
+            animator.SetBool("Jump", isjump);
+        }        
     }
 }
