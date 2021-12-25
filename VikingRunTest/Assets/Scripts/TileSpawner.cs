@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class TileSpawner : MonoBehaviour
 {
-    public GameObject tileA, tileB, cornerAB, cornerBA, endA, startA, endB, startB;
-    private GameObject tileToSpawn;
+    public GameObject tileA, tileB, cornerAB, cornerBA, endA, startA, endB, startB, FenceA, FenceB;
+    private GameObject tileToSpawn, obstacle;
     public GameObject referenceObject;
     private GameObject child;
     public float timeOffset = 0.4f;
+    private bool ObstacleUsed = false;
     private float r;
     private Vector3 previousTilePosition;
     private Vector3 spawnPos;
@@ -42,9 +43,24 @@ public class TileSpawner : MonoBehaviour
             r = Random.value;
             spawnPos = previousTilePosition + 6.0f * direction;
             if (r < 0.6)
+            {
                 direction = mainDirection;
+                if (r < 0.3 && ObstacleUsed == false)
+                {
+                    if (tileToSpawn == tileA) obstacle = FenceA;
+                    else obstacle = FenceB;
+                    child = Instantiate(obstacle, spawnPos + 0.5f * Vector3.up, Quaternion.Euler(0, 0, 0));
+                    child.transform.parent = referenceObject.transform;
+                    ObstacleUsed = true;
+                }
+                else
+                {
+                    ObstacleUsed = false;
+                }
+            }
             else if (r < 0.8)
             {
+                ObstacleUsed = false;
                 direction = otherDirection;
                 otherDirection = mainDirection;
                 mainDirection = direction;
@@ -55,6 +71,7 @@ public class TileSpawner : MonoBehaviour
             else
             {
                 direction = mainDirection;
+                ObstacleUsed = false;
                 if (tileToSpawn == tileA)
                 {
                     spawnPos -= 1.42f * direction;
@@ -96,5 +113,8 @@ public class TileSpawner : MonoBehaviour
             }
             previousTilePosition = spawnPos;
         }
+
+        if ((referenceObject.transform.GetChild(0).position - transform.position).magnitude > 30)
+            Destroy(referenceObject.transform.GetChild(0).gameObject);
     }
 }

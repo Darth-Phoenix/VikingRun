@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: e9ecfbd7f4ec0432ca86d89536bf7b1f, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.5636346, g: 0.66571176, b: 0.84339, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 225842255}
-  - component: {fileID: 225842256}
   m_Layer: 0
   m_Name: tiles
   m_TagString: Untagged
@@ -154,28 +153,6 @@ Transform:
   m_Father: {fileID: 1287768854}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &225842256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 225842254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a98b641afeadda3449e32c9aa61b2ba8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileA: {fileID: 6067611505433864247, guid: 29d53953053c7b84096cd0149fbbaa61, type: 3}
-  tileB: {fileID: 6792495459241826692, guid: 6dd1a7677272bcc48a937e08cc17ea99, type: 3}
-  cornerAB: {fileID: 558633681100029613, guid: bb4ba7d459a97614d9bd9372e77e951d, type: 3}
-  cornerBA: {fileID: 8953379375681118614, guid: b6697a279abcd574591a1c90eaacbd89, type: 3}
-  endA: {fileID: 1980974546329925693, guid: aad23dc158dc531409af07041ce115c7, type: 3}
-  startA: {fileID: 5894289827056015154, guid: 257603027c1e09242a8f9311dc612e72, type: 3}
-  endB: {fileID: 1578863840271774769, guid: c41f18d2d52c0d74cbfb6b8fbbe7ed7a, type: 3}
-  startB: {fileID: 1523154280368784402, guid: b8158284d5251c74b816013a5f07223a, type: 3}
-  referenceObject: {fileID: 225842254}
-  timeOffset: 0.4
 --- !u!1 &422085939
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +435,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -483,7 +461,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -546,6 +524,30 @@ MonoBehaviour:
   trailDistance: 5
   heightOffset: 3
   cameraDelay: 0.02
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98b641afeadda3449e32c9aa61b2ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileA: {fileID: 6067611505433864247, guid: 29d53953053c7b84096cd0149fbbaa61, type: 3}
+  tileB: {fileID: 6792495459241826692, guid: 6dd1a7677272bcc48a937e08cc17ea99, type: 3}
+  cornerAB: {fileID: 558633681100029613, guid: bb4ba7d459a97614d9bd9372e77e951d, type: 3}
+  cornerBA: {fileID: 8953379375681118614, guid: b6697a279abcd574591a1c90eaacbd89, type: 3}
+  endA: {fileID: 1980974546329925693, guid: aad23dc158dc531409af07041ce115c7, type: 3}
+  startA: {fileID: 5894289827056015154, guid: 257603027c1e09242a8f9311dc612e72, type: 3}
+  endB: {fileID: 1578863840271774769, guid: c41f18d2d52c0d74cbfb6b8fbbe7ed7a, type: 3}
+  startB: {fileID: 1523154280368784402, guid: b8158284d5251c74b816013a5f07223a, type: 3}
+  FenceA: {fileID: 437599891955267487, guid: f64077a0d46a68d4aa773210f445b0d1, type: 3}
+  FenceB: {fileID: 8706997139698392430, guid: f8e006dfa646d1941bc00f0b459bc61f, type: 3}
+  referenceObject: {fileID: 225842254}
+  timeOffset: 0.4
 --- !u!1 &1079095537
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,7 +898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   JumpingForce: 100
-  movingSpeed: 10
+  movingSpeed: 9
 --- !u!54 &2077037591
 Rigidbody:
   m_ObjectHideFlags: 0

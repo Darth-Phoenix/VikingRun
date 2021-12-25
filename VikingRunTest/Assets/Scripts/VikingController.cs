@@ -17,7 +17,7 @@ public class VikingController : MonoBehaviour
     bool run = false;
         
     //MeshRenderer mr;
-    [SerializeField]float movingSpeed = 10.0f;
+    [SerializeField]float movingSpeed = 9.0f;
     Rigidbody rb;
     Animator animator;
     NavMeshAgent agent;
@@ -53,6 +53,11 @@ public class VikingController : MonoBehaviour
         {
             isjump = false;
         }
+        if (collision.transform.name.Contains("rock"))
+        {
+            rb.AddForce(transform.forward * -10);
+            movingSpeed = 0;
+        }
     }
 
     void OnCollisionStay(Collision collision)
@@ -61,17 +66,22 @@ public class VikingController : MonoBehaviour
         {
             isjump = false;
         }
+        if (collision.transform.name.Contains("rock"))
+        {
+            rb.AddForce(transform.forward * -10);
+            movingSpeed = 0;
+        }
     }
 
     void OnCollisionExit(Collision collision)
     {
-
+        movingSpeed = 9;
     }
 
     void Update()
     {
         run = true;
-        transform.localPosition += 10 * Time.deltaTime * transform.forward;
+        transform.localPosition += movingSpeed * Time.deltaTime * transform.forward;
 
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -90,7 +100,7 @@ public class VikingController : MonoBehaviour
             {
                 {
                     isjump = true;
-                    rb.AddForce(100 * Vector3.up);
+                    rb.AddForce(150 * Vector3.up);
                 }
             }
         }
