@@ -2,50 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Animator))]
-//[RequireComponent(typeof(NavMeshAgent))]
 
 public class VikingController : MonoBehaviour
 {
-    //public Vector3 MovingDirection;
-    public float JumpingForce = 100;
+    public GameOver EndScreen;
+    public HideIcon Icon;
+
     bool isjump = false;
     bool run = true;
     bool endgame = false;
+    private int coins = 0;
+    float StartTime, EndTime;
 
-    //MeshRenderer mr;
-    [SerializeField]float movingSpeed = 9.0f;
+    private float movingSpeed = 9.0f;
     Rigidbody rb;
     Animator animator;
     NavMeshAgent agent;
 
     RaycastHit raycastHit;
- 
-    //Vector2 velocity = Vector2.zero;
 
-
-    /*private void OnAnimatorMove()
+    private void End()
     {
-        transform.position = agent.nextPosition;
-    }*/
-    void Awake()
-    {
-        //Debug.Log("awake");
+        EndScreen.Setup(EndTime - StartTime, coins);
     }
 
     void Start()
     {
-        //Transform t = GetComponent<Transform>();
-        //mr = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        //agent = GetComponent<NavMeshAgent>();
-        //agent.updatePosition = false;
         transform.position = new Vector3(0, 1, 1);
+
+        StartTime = Time.time;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -55,20 +48,36 @@ public class VikingController : MonoBehaviour
             endgame = true;
             run = false;
             isjump = false;
+            movingSpeed = 0;
             transform.Rotate(new Vector3(0f, 90f, 0f));
             animator.SetBool("Defeated", endgame);
+            EndTime = Time.time;
+            Invoke("End", 2.0f);
         }
         else
         {
             if (collision.transform.name.Contains("module"))
             {
-                isjump = false;
-                run = true;
+                if (transform.position.y < 1)
+                {
+                    rb.AddForce(transform.forward * -10);
+                    movingSpeed = 0;
+                }
+                else
+                {
+                    isjump = false;
+                    run = true;
+                }
             }
             if (collision.transform.name.Contains("rock"))
             {
                 rb.AddForce(transform.forward * -10);
                 movingSpeed = 0;
+            }
+            if (collision.transform.name.Contains("Viking_Shield"))
+            {
+                coins++;
+                Destroy(collision.gameObject);
             }
         }      
     }
@@ -77,8 +86,16 @@ public class VikingController : MonoBehaviour
     {
         if (collision.transform.name.Contains("module"))
         {
-            isjump = false;
-            run = true;
+            if (transform.position.y < 1)
+            {
+                rb.AddForce(transform.forward * -10);
+                movingSpeed = 0;
+            }
+            else
+            {
+                isjump = false;
+                run = true;
+            }
         }
         if (collision.transform.name.Contains("rock"))
         {
@@ -94,9 +111,9 @@ public class VikingController : MonoBehaviour
 
     void Update()
     {
+        transform.localPosition += movingSpeed * Time.deltaTime * transform.forward;
         if (!endgame)
         {
-            transform.localPosition += movingSpeed * Time.deltaTime * transform.forward;
 
             if (Input.GetKeyDown(KeyCode.A))
             {
@@ -131,24 +148,21 @@ public class VikingController : MonoBehaviour
                 }
             }
 
-            /*if (Input.GetMouseButtonDown(1))
+            if (transform.position.y < 0)
             {
-                Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(r, out raycastHit))
-                {
-                    agent.SetDestination(raycastHit.point);
-                }
+                endgame = true;
+                run = false;
+                isjump = true;
+                EndTime = Time.time;
+                Invoke("End", 2.0f);
             }
-
-            Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
-            float dx = Vector3.Dot(transform.right, worldDeltaPosition);
-            float dz = Vector3.Dot(transform.forward, worldDeltaPosition);
-            Vector2 deltaPostition = new Vector2(dx, dz);
-            velocity = deltaPostition / Time.deltaTime;
-            run = velocity.magnitude > MovingThreshold && agent.remainingDistance > agent.radius;*/
 
             animator.SetBool("Run", run);
             animator.SetBool("Jump", isjump);
-        }        
+        }
+        else
+        {
+            Icon.Hide();
+        }
     }
 }

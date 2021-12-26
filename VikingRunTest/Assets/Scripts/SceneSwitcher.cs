@@ -11,8 +11,6 @@ public class SceneSwitcher : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData e)
     {
         Scene scene = SceneManager.GetActiveScene();
-        Debug.Log("current scene name = " + scene.name + " and scene index = " + scene.buildIndex);
-
         SceneManager.LoadScene(SceneIndexDestination);
     }
 }

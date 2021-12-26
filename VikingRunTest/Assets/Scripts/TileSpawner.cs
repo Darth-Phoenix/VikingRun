@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TileSpawner : MonoBehaviour
 {
-    public GameObject tileA, tileB, cornerAB, cornerBA, endA, startA, endB, startB, FenceA, FenceB;
+    public GameObject tileA, tileB, cornerAB, cornerBA, endA, startA, endB, startB, FenceA, FenceB, Coin;
     private GameObject tileToSpawn, obstacle;
     public GameObject referenceObject;
     private GameObject child;
@@ -55,6 +55,8 @@ public class TileSpawner : MonoBehaviour
                 else
                 {
                     ObstacleUsed = false;
+                    child = Instantiate(Coin, spawnPos + 2.0f * Vector3.up, Quaternion.Euler(-90, 0, 0));
+                    child.transform.parent = referenceObject.transform;
                 }
             }
             else if (r < 0.8)
@@ -66,6 +68,8 @@ public class TileSpawner : MonoBehaviour
                 if (tileToSpawn == tileA) tileToSpawn = cornerAB;
                 else if (tileToSpawn == tileB) tileToSpawn = cornerBA;
                 spawnPos += 0.44f * direction + 1.57f * otherDirection;
+                child = Instantiate(Coin, spawnPos + 2.0f * Vector3.up, Quaternion.Euler(-90, 0, 0));
+                child.transform.parent = referenceObject.transform;
             }
             else
             {
@@ -113,7 +117,7 @@ public class TileSpawner : MonoBehaviour
             previousTilePosition = spawnPos;
         }
 
-        if ((referenceObject.transform.GetChild(0).position - transform.position).magnitude > 50)
+        if (referenceObject.transform.childCount != 0 && (referenceObject.transform.GetChild(0).position - transform.position).magnitude > 50)
             Destroy(referenceObject.transform.GetChild(0).gameObject);
     }
 }

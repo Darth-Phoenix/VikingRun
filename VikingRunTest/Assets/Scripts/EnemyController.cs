@@ -11,17 +11,12 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float movingSpeed = 9.0f;
     Animator animator;
     public Transform viking;
-    private float dist = 10.0f;
-
-    void Awake()
-    {
-
-    }
+    private float dist = 3.0f;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        transform.position = viking.position - dist * viking.forward;
+        transform.position = new Vector3(0, 1, -2);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -37,24 +32,99 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        transform.position += movingSpeed * Time.deltaTime * transform.forward;
+        transform.position = new Vector3(transform.position.x, viking.position.y, transform.position.z);
         if (!endgame)
         {
-            transform.position += movingSpeed * Time.deltaTime * transform.forward;
-            dist = (viking.position - transform.position).magnitude;
-            transform.position = viking.position - dist * viking.forward;
-
-            if (Input.GetKeyDown(KeyCode.A))
+            if (transform.forward == new Vector3(1, 0, 0))
             {
-                transform.Rotate(new Vector3(0f, -90f, 0f));
-                transform.position = viking.position - dist * viking.forward;
+                if (transform.position.x <= viking.position.x)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                }
+                else if (transform.position.z <= viking.position.z)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                }
+                else if (transform.position.z > viking.position.z)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                }
+                else if (transform.position.x > viking.position.x)
+                {
+                    transform.rotation = Quaternion.Euler(0f, -90f, 0f);
+                }
+            }
+            else if (transform.forward == new Vector3(0, 0, 1))
+            {
+                if (transform.position.z <= viking.position.z)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                }
+                else if (transform.position.x <= viking.position.x)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                }
+                else if (transform.position.x > viking.position.x)
+                {
+                    transform.rotation = Quaternion.Euler(0f, -90f, 0f);
+                }
+                else if ((transform.position.z > viking.position.z))
+                {
+                    transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                }
+            }
+            else if (transform.forward == new Vector3(0, 0, -1))
+            {
+                if (transform.position.z >= viking.position.z)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                }
+                else if (transform.position.x >= viking.position.x)
+                {
+                    transform.rotation = Quaternion.Euler(0f, -90f, 0f);
+                }
+                else if (transform.position.x < viking.position.x)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                }
+                else if (transform.position.z < viking.position.z)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                }
+            }
+            else if (transform.forward == new Vector3(-1, 0, 0))
+            {
+                if (transform.position.x >= viking.position.x)
+                {
+                    transform.rotation = Quaternion.Euler(0f, -90f, 0f);
+                }
+                else if (transform.position.z >= viking.position.z)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                }
+                else if (transform.position.z < viking.position.z)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                }
+                else if (transform.position.x < viking.position.x)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+                }
             }
 
-            if (Input.GetKeyDown(KeyCode.D))
+            if (transform.position.y < 1.05)
             {
-                transform.Rotate(new Vector3(0f, 90f, 0f));
-                transform.position = viking.position - dist * viking.forward;
+                isjump = false;
+                run = true;
             }
 
+            if (transform.position.y < 0)
+            {
+                endgame = true;
+                run = false;
+                isjump = true;
+            }
 
             if (!isjump)
             {
@@ -65,12 +135,6 @@ public class EnemyController : MonoBehaviour
                         run = false;
                     }
                 }
-            }
-
-            if (transform.position.y < 1.03)
-            {
-                isjump = false;
-                run = true;
             }
 
             animator.SetBool("Run", run);
