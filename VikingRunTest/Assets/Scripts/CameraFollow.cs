@@ -5,9 +5,9 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform target;
-    public float trailDistance = 5.0f;
-    public float heightOffset = 3.0f;
-    public float cameraDelay = 0.02f;
+    private float trailDistance = 2f;
+    private float heightOffset = 3f;
+    private float cameraDelay = 0.02f;
    
     void Update()
     {

@@ -8,30 +8,36 @@ public class EnemyController : MonoBehaviour
     bool run = true;
     bool endgame = false;
 
-    [SerializeField] float movingSpeed = 9.0f;
+    private float movingSpeed = 8.9f;
     Animator animator;
     public Transform viking;
-    private float dist = 3.0f;
+    private float dist = 10.0f;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        transform.position = new Vector3(0, 1, -2);
+        transform.position = viking.position - new Vector3(0, 0, dist);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.name == "viking")
         {
-            endgame = true;
-            run = false;
-            isjump = false;
-            animator.SetBool("Punch", endgame);
+            movingSpeed = 0;
+            if (!endgame)
+            {
+                endgame = true;
+                run = false;
+                isjump = false;
+                animator.SetBool("Punch", endgame);
+            }
         }
     }
 
     void Update()
     {
+        if ((transform.position - viking.position).magnitude > 10)
+            transform.position = viking.position - viking.forward * 10;
         transform.position += movingSpeed * Time.deltaTime * transform.forward;
         transform.position = new Vector3(transform.position.x, viking.position.y, transform.position.z);
         if (!endgame)
@@ -135,10 +141,9 @@ public class EnemyController : MonoBehaviour
                         run = false;
                     }
                 }
-            }
-
-            animator.SetBool("Run", run);
-            animator.SetBool("Jump", isjump);
+            }           
         }
+        animator.SetBool("Run", run);
+        animator.SetBool("Jump", isjump);
     }       
 }
