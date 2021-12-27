@@ -45,23 +45,20 @@ public class VikingController : MonoBehaviour
     {
         if (collision.transform.name == "Monster")
         {
-            if (!endgame)
-            {
-                endgame = true;
-                run = false;
-                isjump = false;
-                movingSpeed = 0;
-                transform.Rotate(new Vector3(0f, 90f, 0f));
-                animator.SetBool("Defeated", endgame);
-                EndTime = Time.time;
-                Invoke("End", 2.0f);
-            }
+            endgame = true;
+            run = false;
+            isjump = false;
+            movingSpeed = 0;
+            transform.Rotate(new Vector3(0f, 90f, 0f));
+            animator.SetBool("Defeated", endgame);
+            EndTime = Time.time;
+            Invoke("End", 2.0f);
         }
         else
         {
             if (collision.transform.name.Contains("module"))
             {
-                if (transform.position.y < 0.8)
+                if (transform.position.y < 1)
                 {
                     rb.AddForce(transform.forward * -10);
                     movingSpeed = 0;
@@ -89,7 +86,7 @@ public class VikingController : MonoBehaviour
     {
         if (collision.transform.name.Contains("module"))
         {
-            if (transform.position.y < 0.8)
+            if (transform.position.y < 1)
             {
                 rb.AddForce(transform.forward * -10);
                 movingSpeed = 0;
@@ -158,13 +155,14 @@ public class VikingController : MonoBehaviour
                 isjump = true;
                 EndTime = Time.time;
                 Invoke("End", 2.0f);
-            }         
+            }
+
+            animator.SetBool("Run", run);
+            animator.SetBool("Jump", isjump);
         }
         else
         {
             Icon.Hide();
         }
-        animator.SetBool("Run", run);
-        animator.SetBool("Jump", isjump);
     }
 }

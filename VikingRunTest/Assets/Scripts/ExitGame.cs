@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ExitGame : MonoBehaviour, IPointerClickHandler
+public class ExitSwitcher : MonoBehaviour, IPointerClickHandler
 {
     public void OnPointerClick(PointerEventData e)
     {
